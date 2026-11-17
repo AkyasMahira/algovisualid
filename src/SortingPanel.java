@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 // Panel modul Sorting: input, kontrol, gambar bar, penjelasan
 public class SortingPanel extends JPanel {
@@ -12,7 +11,7 @@ public class SortingPanel extends JPanel {
     private JButton autoBtn = new JButton("Auto Play");
     private Canvas canvas = new Canvas();
 
-    private ArrayList<Step> steps = new ArrayList<Step>();
+    private Step[] steps = new Step[0];
     private int current = 0;
     private Timer timer;
 
@@ -58,11 +57,11 @@ public class SortingPanel extends JPanel {
     }
 
     private void next() {
-        if (current < steps.size() - 1) {
+        if (current < steps.length - 1) {
             current++;
             tampilkanLangkah();
         }
-        if (current >= steps.size() - 1) {
+        if (current >= steps.length - 1) {
             timer.stop();
             nextBtn.setEnabled(false);
             autoBtn.setEnabled(false);
@@ -80,8 +79,8 @@ public class SortingPanel extends JPanel {
     }
 
     private void tampilkanLangkah() {
-        infoLabel.setText(steps.get(current).text);
-        counterLabel.setText("Langkah: " + current + " / " + (steps.size() - 1));
+        infoLabel.setText(steps[current].text);
+        counterLabel.setText("Langkah: " + current + " / " + (steps.length - 1));
         canvas.repaint();
     }
 
@@ -89,8 +88,8 @@ public class SortingPanel extends JPanel {
     private class Canvas extends JPanel {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            if (steps.isEmpty()) return;
-            Step s = steps.get(current);
+            if (steps.length == 0) return;
+            Step s = steps[current];
             int n = s.data.length;
             int w = getWidth() / n;
             for (int i = 0; i < n; i++) {

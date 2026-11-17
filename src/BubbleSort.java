@@ -1,13 +1,24 @@
-import java.util.ArrayList;
-
-// Menjalankan Bubble Sort sekali, mencatat setiap langkah ke list
+// Menjalankan Bubble Sort sekali, mencatat setiap langkah ke array
 public class BubbleSort {
 
-    static ArrayList<Step> generate(int[] input) {
-        ArrayList<Step> steps = new ArrayList<Step>();
+    private static Step[] push(Step[] steps, int count, Step step) {
+        if (count == steps.length) {
+            Step[] bigger = new Step[steps.length * 2];
+            System.arraycopy(steps, 0, bigger, 0, count);
+            steps = bigger;
+        }
+        steps[count] = step;
+        return steps;
+    }
+
+    static Step[] generate(int[] input) {
+        Step[] steps = new Step[4];
+        int count = 0;
         int[] data = input.clone();
         int n = data.length;
-        steps.add(new Step(data, -1, -1, false, n, "Data awal. Tekan Next Step untuk memulai."));
+
+        steps = push(steps, count, new Step(data, -1, -1, false, n, "Data awal. Tekan Next Step untuk memulai."));
+        count++;
 
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - 1 - i; j++) {
@@ -18,10 +29,15 @@ public class BubbleSort {
                     data[j] = data[j + 1];
                     data[j + 1] = temp;
                 }
-                steps.add(new Step(data, j, j + 1, swap, n - i, text));
+                steps = push(steps, count, new Step(data, j, j + 1, swap, n - i, text));
+                count++;
             }
         }
-        steps.add(new Step(data, -1, -1, false, 0, "Selesai! Semua data sudah terurut."));
-        return steps;
+        steps = push(steps, count, new Step(data, -1, -1, false, 0, "Selesai! Semua data sudah terurut."));
+        count++;
+
+        Step[] result = new Step[count];
+        System.arraycopy(steps, 0, result, 0, count);
+        return result;
     }
 }
